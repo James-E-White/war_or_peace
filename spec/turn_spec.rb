@@ -30,7 +30,7 @@ RSpec.describe Turn do
    expect(turn).to be_an_instance_of(Turn)
    end
 
-      it 'has readable attributes'do
+    it 'has readable attributes'do
       card1 = Card.new(:heart, 'Jack', 11)
       card2 = Card.new(:heart, '10', 10)
       card3 = Card.new(:heart, '9', 9)
@@ -49,8 +49,9 @@ RSpec.describe Turn do
       player2 = Player.new("Aurora", deck2)
 
       turn = Turn.new(player1, player2)
- # describe 'turn' do
-   it 'has turn type basic and a winner' do
+   end
+   describe '#turn' do
+     it 'has turn type basic and a winner' do
      card1 = Card.new(:heart, 'Jack', 11)
      card2 = Card.new(:heart, '10', 10)
      card3 = Card.new(:heart, '9', 9)
@@ -124,7 +125,7 @@ RSpec.describe Turn do
 
 
      expect(turn.spoils_of_war).to eq([card1, card3])
-
+     end
     end
 
      it"has a turn type war and a winner"do
@@ -153,7 +154,7 @@ RSpec.describe Turn do
      turn.award_spoils(player2)
      expect(player2.deck.cards).to eq([card7, card1, card4, card2, card3, card5, card6,])
 
-      end
+    end
 
      it "has a type mutually_assured_destruction with no winner"do
      card1 = Card.new(:heart, 'Jack', 11)
@@ -183,5 +184,5 @@ RSpec.describe Turn do
      end
 
 
-  end
+  
 end

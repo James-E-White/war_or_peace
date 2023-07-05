@@ -8,22 +8,16 @@ require './lib/turn'
 #Order matters
 #how does the match start-end
 class Game
-   attr_reader :deck,
-               :player1,
+   attr_reader :player1,
                :player2,
-               :turn,
-               :full_deck,
-               :deck1,
-               :deck2
+               :turn_count,
+               :turn_start
 
-     def initialize
-      @full_deck = new_deck
-      @deck1 = @full_deck[0, 26]
-      @deck2 = @full_deck[26, 26]
-      @player1 = Player.new("Megan", @deck1)
-      @player2 = Player.new("Aurora", @deck2)
-      @turn = turn
-      @turn_start = turn_start
+     def initialize(player1, player2)
+      @player1 = player1
+      @player2 = player2
+      @turn_count = 0
+      @turn_start = player1
      end
 
     def new_deck
@@ -81,10 +75,12 @@ class Game
       cards << card50 = Card.new(:spade,'6',6)
       cards << card51 = Card.new(:diamond,'9',9)
       cards << card52 = Card.new(:heart,'Ace',14)
-      @full_deck = Deck.new(cards)
+
       cards.shuffle!
-      # deck1 = Deck.new(@full_deck.cards[0, 26])
-      # deck2 = Deck.new(@full_deck.cards[26, 26])
+      @full_deck = Deck.new(cards)
+
+      @deck1 = @full_deck.cards[0, 26]
+      @deck2 = @full_deck.cards[26, 26]
 
     end
 
@@ -96,10 +92,11 @@ Type 'GO' to start the game!
  p welcome
  @turn_count = 0
  play_start
-  end
-  turn = turn.new(player1, player2)
-  binding.pry
-  @turn_count = 1
+ turn = Turn.new(player1, player2)
+ @turn_count = 1
+end
+  
+
 
 
   # def play_start
