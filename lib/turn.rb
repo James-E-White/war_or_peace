@@ -1,82 +1,113 @@
 class Turn
   attr_reader :player1,
               :player2,
-              :spoils_of_war
+              :spoils_of_war,
+              :type
 
-   def initialize(player1, player2)
+  def initialize(player1, player2)
     @player1 = player1
     @player2 = player2
     @spoils_of_war = []
-   end
+    determine_turn_type
+  end
 
-  def type
-      #how the game is played. must have a winner or war! if two war than spoils of war! rank_of_cards_at
-      #get discarded with no winner.
-    if @player1.deck.rank_of_card_at(0) == @player2.deck.rank_of_card_at(0) && @player1.deck.rank_of_card_at(2) == @player2.deck.rank_of_card_at(2)
-      :mutually_assured_destruction
-    elsif @player1.deck.rank_of_card_at(0) == @player2.deck.rank_of_card_at(0)
-      :war
-    elsif @player1.deck.rank_of_card_at(0) != @player2.deck.rank_of_card_at(0)
-        :basic
-
+  def play
+    if type == :basic
+      play_basic_turn
+    elsif type == :war
+      play_war_turn
+    else
+      play_mutually_assured_destruction_turn
     end
   end
 
-    def winner
-      if type == :mutually_assured_destruction
-        "No Winner"
-      elsif
-        if type == :war
-          @player1.deck.rank_of_card_at(2) > @player2.deck.rank_of_card_at(2)
-          @player1
-        elsif
-          @player2
-        end
-        if type == :basic
-          if @player1.deck.rank_of_card_at(0) > @player2.deck.rank_of_card_at(0)
-            @player1
-          else
-            #@player1.deck.rank_of_cards_at(0) < @player2.deck.rank_of_cards_at(0)
-            @player2
-          end
-        end
-      end
+  def player1_card
+    player1.deck.cards[0]
+  end
+
+  def player2_card
+    player2.deck.cards[0]
+  end
+
+  def winner
+    if type == :basic
+      determine_basic_winner
+    elsif type == :war
+      determine_war_winner
+    else
+      'No winner for mutually assured destruction'
     end
-
-    def pile_cards
-     if type == :basic
-       @spoils_of_war << @player1.deck.remove_card
-       @spoils_of_war << @player2.deck.remove_card
-     elsif type == :war
-       3.times do
-         @spoils_of_war << @player1.deck.remove_card
-         @spoils_of_war << @player2.deck.remove_card
-       end
-     elsif type == :mutually_assured_destruction
-       
-     end
-    end
-
-
+  end
 
     def award_spoils(winner)
-
-     # if winner == @player1
-       winner.deck.cards.concat(@spoils_of_war)
-    #    @player1.deck.cards.flatten!
-    #  else
-    #    winner == @player2
-    #    @player2.deck.cards.concat(@spoils_of_war)
-    #    @player2.deck.cards.flatten!
-    #  end
+    if winner == player1
+      player1.deck.add_cards(spoils_of_war)
+    elsif winner == player2
+      player2.deck.add_cards(spoils_of_war)
     end
+    @spoils_of_war = []
+  end
+
+  private
+
+   def determine_basic_winner
+    if player1_card.rank > player2_card.rank
+      player1
+    elsif player2_card.rank > player1_card.rank
+      player2
+    else
+      "No winner"
+    end
+  end
+
+  def determine_turn_type
+    @type = if player1.deck.cards[0].rank == player2.deck.cards[0].rank
+              if player1.deck.cards[2].nil? || player2.deck.cards[2].nil?
+                :mutually_assured_destruction
+              else
+                :war
+              end
+            else
+              :basic
+            end
+  end
+
+  def play_basic_turn
+    winner = determine_turn_winner(player1, player2)
+    if winner
+      add_spoils_to_winner(winner)
+      puts "#{winner.name} won the turn!"
+    else
+      puts "It's a tie! No winner for this turn."
+    end
+  end
+
+  def play_war_turn
+    winner = determine_turn_winner(player1, player2, 3)
+    if winner
+      add_spoils_to_winner(winner)
+      puts "#{winner.name} won the war!"
+    else
+      puts "It's a tie! No winner for this war."
+    end
+  end
+
+  def play_mutually_assured_destruction_turn
+    puts 'Turn ended in mutually assured destruction!'
+  end
+
+  def determine_turn_winner(player1, player2, compare_cards = 1)
+    rank1 = player1.deck.rank_of_card_at(compare_cards)
+    rank2 = player2.deck.rank_of_card_at(compare_cards)
+    if rank1 > rank2
+      player1
+    elsif rank2 > rank1
+      player2
+    end
+  end
+
+  def add_spoils_to_winner(winner)
+    winner.deck.cards.concat(spoils_of_war)
+    @spoils_of_war = []
+  end
 end
-
-
-       #  def war
-       #    if turn.type == war
-       #    if @player1.deck.rank_of_cards_at(0) == @player2.deck.rank_of_cards_at(0)
-       #      @war
-       #    end
-       #
-       # end

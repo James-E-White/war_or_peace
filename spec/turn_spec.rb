@@ -165,10 +165,10 @@ RSpec.describe Turn do
      card6 = Card.new(:diamond, '8', 8)
      card7 = Card.new(:heart, '3', 3)
      card8 = Card.new(:diamond, '2', 2)
-     cards1 = [card1, card2, card5, card8]
-     deck1 = Deck.new(cards1)
-     cards2 = [card4, card3, card6, card7]
-     deck2 = Deck.new(cards2)
+     
+     deck1 = Deck.new([card1, card5, card7])
+     
+     deck2 = Deck.new([card4, card6, card8])
 
      player1 = Player.new("Megan", deck1)
      player2 = Player.new("Aurora", deck2)
@@ -179,10 +179,7 @@ RSpec.describe Turn do
      expect(turn.winner).to eq("No Winner")
      turn.pile_cards
      expect(turn.spoils_of_war).to eq([])
-     # expect(player1.deck.cards).to eq([card8])
-     # expect(player2.deck.cards).to eq([card7])
+     expect(player1.deck.cards).to eq([card7])
+     expect(player2.deck.cards).to eq([card8])
      end
-
-
-  
 end

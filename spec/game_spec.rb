@@ -23,8 +23,8 @@ RSpec.describe Game do
     @deck1 = Deck.new([@card1, @card2, @card5, @card8])
     @deck2 = Deck.new([@card3, @card4, @card6, @card7])
     
-    @player1 = Player.new("Megan", Deck.new([]))
-    @player2 = Player.new("Aurora", Deck.new([]))
+    @player1 = Player.new("Megan", @deck1)
+    @player2 = Player.new("Aurora", @deck2)
     
     @game = Game.new(@player1, @player2)
     # turn = Turn.new(@player1, @player2)
@@ -32,9 +32,12 @@ RSpec.describe Game do
    it "exists" do
    expect(@game).to be_an_instance_of(Game)
   end
+   
+   it "has players" do 
+    expect(@player1.name).to eq("Megan")
+    expect(@player1.deck).to eq(@deck1)
+    expect(@player2.name).to eq("Aurora")
+    expect(@player2.deck).to eq(@deck2)
+   end
  
-  # expect(turn.type).to eq()
-  # turn.pile_cards
-  # turn.award_spoils(player1)
-  # expect(turn.spoils_of_war).to eq[]
 end

@@ -29,8 +29,8 @@ class Deck
      cards.shift
     end
 
-    def add_card(card)
-     @cards << card
+    def add_cards(new_cards)
+     cards.concat(new_cards)
     end
 
 
