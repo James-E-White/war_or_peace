@@ -39,24 +39,32 @@ class Turn
     end
   end
 
-    def award_spoils(winner)
-    if winner == player1
-      player1.deck.add_cards(spoils_of_war)
-    elsif winner == player2
-      player2.deck.add_cards(spoils_of_war)
+  def award_spoils(winner)
+  if type == :basic
+    winner.deck.add_cards(player1.deck.cards.shift(1))
+    winner.deck.add_cards(player2.deck.cards.shift(1))
+  elsif type == :war
+    3.times do
+      winner.deck.add_cards(player1.deck.cards.shift(1))
+      winner.deck.add_cards(player2.deck.cards.shift(1))
     end
-    @spoils_of_war = []
+  elsif type == :mutually_assured_destruction
+    3.times do
+      player1.deck.cards.shift(1)
+      player2.deck.cards.shift(1)
+      end
+    end
   end
 
   private
 
-   def determine_basic_winner
+  def determine_basic_winner
     if player1_card.rank > player2_card.rank
       player1
     elsif player2_card.rank > player1_card.rank
       player2
     else
-      "No winner"
+      'No winner'
     end
   end
 

@@ -116,10 +116,16 @@ class Game
   def game_loop
     until game_over?
       play_turn
-      break if game_over?
+      break if game_over? || quit_game?
     end
 
     display_game_winner
+  end
+
+  def quit_game?
+    puts "Type 'quit' to exit the game."
+    input = gets.chomp.downcase
+    input == 'quit'
   end
 
   def play_turn
@@ -127,9 +133,9 @@ class Game
     puts "Turn #{@turn_count}:"
     puts "#{player1.name} deck: #{player1.deck.cards.length} cards"
     puts "#{player2.name} deck: #{player2.deck.cards.length} cards"
-    puts "Type 'continue' to play the turn"
+    puts "Type 'c' to play the turn"
     input = gets.chomp.downcase
-    if input == 'continue'
+    if input == 'c'
       puts "\n===== Playing the turn ====="
       turn.play
       puts "Player 1 cards: #{player1.deck.cards}"
@@ -139,6 +145,7 @@ class Game
       puts "Turn type: #{turn.type}"
       puts "Turn winner: #{turn.winner ? turn.winner.name : 'Tie'}"
       collect_spoils(turn)
+
       increment_turn_count
       puts "===========================\n\n"
       display_game_winner if game_over?
